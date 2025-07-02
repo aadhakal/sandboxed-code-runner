@@ -76,9 +76,9 @@ if __name__ == "__main__":
         script_path = f.name
 
     try:
-        # Execute with nsjail - Docker-compatible configuration
+        # Execute with nsjail - Cloud Run compatible configuration
         cmd = [
-            '/usr/bin/nsjail',
+            '/usr/local/bin/nsjail',
             '--mode', 'o',                    # Execute once and exit
             '--time_limit', '30',             # 30 seconds max execution time
             '--rlimit_as', '300',             # 300MB memory limit  
@@ -86,17 +86,8 @@ if __name__ == "__main__":
             '--rlimit_fsize', '10',           # 10MB max file size
             '--rlimit_nofile', '50',          # Max 50 open files
             '--quiet',                        # Reduce nsjail output
-            '--disable_clone_newuser',        # Disable user namespace (Docker compat)
-            '--disable_clone_newnet',         # Disable network namespace  
-            '--bindmount', '/usr:/usr:ro',    # Read-only access to /usr
-            '--bindmount', '/lib:/lib:ro',    # Read-only access to /lib
-            '--bindmount', '/lib64:/lib64:ro', # Read-only access to /lib64
-            '--bindmount', '/bin:/bin:ro',    # Read-only access to /bin
-            '--bindmount', '/tmp:/tmp:rw',    # Read-write access to /tmp
-            '--chroot', '/tmp',               # Chroot to /tmp
-            '--cwd', '/',                     # Working directory
-            '--env', 'PATH=/usr/bin:/bin',    # Limited PATH
-            '--env', 'PYTHONPATH=/usr/lib/python3.11:/usr/local/lib/python3.11/site-packages',
+            '--disable_clone_newuser',        # Disable user namespace (Cloud Run compat)
+            '--disable_clone_newnet',         # Keep network disabled
             '--', 'python3', script_path
         ]
         
